@@ -13,22 +13,23 @@ const TaskInput = ({ onAddTask }: { onAddTask: (title: string, description: stri
     };
 
     return (
-        <div className="p-4">
+        <div className="p-4 bg-white shadow-md rounded-lg transition-transform transform hover:scale-105">
+            <h2 className="text-2xl font-semibold text-center mb-4 text-blue-600">Add a New Task</h2>
             <input
                 type="text"
-                className="border p-2 w-full mb-2"
+                className="border border-blue-300 p-2 w-full mb-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-shadow duration-300"
                 placeholder="Enter task title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
             />
             <textarea
-                className="border p-2 w-full mb-2"
+                className="border border-blue-300 p-2 w-full mb-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-shadow duration-300"
                 placeholder="Enter task description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
             />
             <button
-                className="bg-blue-500 text-white p-2 w-full"
+                className="bg-blue-500 text-white p-3 w-full rounded hover:bg-blue-600 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 onClick={handleAddTask}
             >
                 Add Task
