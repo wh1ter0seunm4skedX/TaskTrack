@@ -6,70 +6,85 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --font-primary: 'Rubik', sans-serif;
-  --font-secondary: 'Roboto', sans-serif;
+    --background: #ffffff;
+    --foreground: #171717;
+    --font-primary: 'Rubik', sans-serif;
+    --font-secondary: 'Roboto', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-primary);
+    color: var(--foreground);
+    background: var(--background);
+    font-family: var(--font-primary);
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-balance {
+        text-wrap: balance;
+    }
 }
 
 /* Custom CSS Animations */
 @keyframes gradient-x {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .animate-gradient-x {
-  animation: gradient-x 15s ease infinite;
+    animation: gradient-x 15s ease infinite;
 }
 
 @keyframes floating-slow {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .animate-floating-slow {
-  animation: floating-slow 10s ease-in-out infinite;
+    animation: floating-slow 10s ease-in-out infinite;
 }
 
 @keyframes floating-fast {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 .animate-floating-fast {
-  animation: floating-fast 6s ease-in-out infinite;
+    animation: floating-fast 6s ease-in-out infinite;
+}
+
+@keyframes modal-open {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-modal-open {
+    animation: modal-open 0.3s ease-out forwards;
 }
