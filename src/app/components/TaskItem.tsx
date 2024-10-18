@@ -2,37 +2,37 @@ import { useState } from 'react';
 import { Task } from '../types';
 import TaskModal from './TaskModal';
 
-const TaskItem = ({ task, onToggleComplete, onDelete, onEdit }: {
+const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpenModal, onCloseModal }: {
     task: Task,
     onToggleComplete: (id: string) => void,
     onDelete: (id: string) => void,
-    onEdit: (id: string, title: string, description: string) => void
+    onEdit: (id: string, title: string, description: string) => void,
+    isModalOpen: boolean,
+    onOpenModal: () => void,
+    onCloseModal: () => void,
 }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [editedTitle, setEditedTitle] = useState(task.title);
     const [editedDescription, setEditedDescription] = useState(task.description);
 
     const handleSave = () => {
         onEdit(task.id, editedTitle, editedDescription);
-        setIsModalOpen(false);
+        onCloseModal();
     };
 
     return (
-        <div className={`p-4 border ${task.completed ? 'bg-green-100' : 'bg-white'}`}>
-            <h3
-                className={`text-lg font-bold ${task.completed ? 'line-through' : ''}`}
-                onClick={() => setIsModalOpen(true)} /* Clicking opens modal */
-            >
+        <div className={`p-4 border mb-4 ${task.completed ? 'bg-green-100' : 'bg-white'} rounded-lg shadow-md transition-transform transform hover:scale-105 cursor-pointer relative z-10`}
+             onClick={onOpenModal}>
+            <h3 className={`text-lg font-bold ${task.completed ? 'line-through' : ''}`}>
                 {task.title}
             </h3>
             <p>{task.description}</p>
 
             <TaskModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={onCloseModal}
                 onDelete={() => {
                     onDelete(task.id);
-                    setIsModalOpen(false);
+                    onCloseModal();
                 }}
                 onToggleComplete={() => onToggleComplete(task.id)}
                 isCompleted={task.completed}
@@ -57,7 +57,7 @@ const TaskItem = ({ task, onToggleComplete, onDelete, onEdit }: {
                     </button>
                     <button
                         className="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition-colors"
-                        onClick={() => setIsModalOpen(false)}
+                        onClick={onCloseModal}
                     >
                         Cancel
                     </button>
