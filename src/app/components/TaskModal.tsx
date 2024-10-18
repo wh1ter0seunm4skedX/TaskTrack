@@ -27,6 +27,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                 {children}
 
                 <div className="mt-4 flex justify-between items-center">
+                    {/* Complete/incomplete button - Left aligned */}
                     <button
                         className={`p-2 rounded ${isCompleted ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white transition-colors`}
                         onClick={onToggleComplete}
@@ -34,20 +35,20 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                         {isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'}
                     </button>
 
-                    {/* Delete button */}
+                    {/* Save button - Center aligned */}
+                    <button
+                        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors mx-auto"
+                        onClick={onSave}
+                    >
+                        Save Changes
+                    </button>
+
+                    {/* Delete button - Right aligned */}
                     <button
                         className="bg-red-700 text-white p-2 rounded hover:bg-red-800 transition-colors"
                         onClick={onDelete}
                     >
                         Delete Task
-                    </button>
-
-                    {/* Save button */}
-                    <button
-                        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
-                        onClick={onSave} // Save the task
-                    >
-                        Save Changes
                     </button>
                 </div>
             </div>

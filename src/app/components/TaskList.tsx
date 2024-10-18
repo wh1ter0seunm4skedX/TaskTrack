@@ -152,7 +152,7 @@ const TaskList = () => {
                     <textarea
                         className="border p-2 w-full mb-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={editedDescription}
-                        onChange={(e) => setEditedDescription(e.target.value)} 
+                        onChange={(e) => setEditedDescription(e.target.value)}
                     />
                 </TaskModal>
             )}
