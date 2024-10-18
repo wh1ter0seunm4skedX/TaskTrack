@@ -3,8 +3,8 @@ import React, { ReactNode } from 'react';
 interface TaskModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onDelete: () => void; // New function to delete task
-    onToggleComplete: () => void; // New function to toggle task completion
+    onDelete: () => void;
+    onToggleComplete: () => void;
     isCompleted: boolean;
     children: ReactNode;
 }
@@ -14,7 +14,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-            <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative z-10 animate-modal-open">
+            <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative z-50 animate-modal-open">
                 <button
                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors"
                     onClick={onClose}
@@ -34,7 +34,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
 
                     {/* Delete button */}
                     <button
-                        className="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition-colors"
+                        className="bg-red-700 text-white p-2 rounded hover:bg-red-800 transition-colors"
                         onClick={onDelete}
                     >
                         Delete Task

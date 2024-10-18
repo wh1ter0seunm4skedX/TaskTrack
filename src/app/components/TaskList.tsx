@@ -1,4 +1,4 @@
-'use client'; // Ensures this is a Client Component
+'use client';
 
 import { useState, useEffect } from 'react';
 import TaskInput from './TaskInput';
@@ -7,26 +7,26 @@ import { Task } from '../types';
 
 const TaskList = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
-    const [deletedTask, setDeletedTask] = useState<Task | null>(null); // State for storing the deleted task
-    const [isUndoVisible, setIsUndoVisible] = useState(false); // State to show or hide the Undo button
-    const [undoTimer, setUndoTimer] = useState<NodeJS.Timeout | null>(null); // Timer to hide the undo button
+    const [deletedTask, setDeletedTask] = useState<Task | null>(null);
+    const [isUndoVisible, setIsUndoVisible] = useState(false);
+    const [undoTimer, setUndoTimer] = useState<NodeJS.Timeout | null>(null);
 
-    // Simulate API call to load tasks from a server
+    // Load initial tasks with predefined tasks
     useEffect(() => {
         const loadTasks = async () => {
-            console.log('Loading tasks from server...');
+            console.log('Loading tasks...');
             const response: Task[] = [
-                { id: '1', title: 'Sample Task 1', description: 'Description 1', completed: false },
-                { id: '2', title: 'Sample Task 2', description: 'Description 2', completed: true },
+                { id: '1', title: 'Apply for a full-stack developer job in a cool place', description: 'Complete and submit the job application.', completed: false },
+                { id: '2', title: 'Get the cool job!', description: 'Celebrate the new opportunity!', completed: false },
+                { id: '3', title: 'Get to know the team and show them your skills!', description: 'Prepare to contribute and impress.', completed: false },
             ];
 
-            setTasks(response); // Update state with fetched tasks
+            setTasks(response);
         };
 
-        loadTasks().catch(console.error); // Handle promise rejection
+        loadTasks().catch(console.error);
     }, []);
 
-    // Function to add a new task
     const addTask = (title: string, description: string) => {
         const newTask: Task = {
             id: Date.now().toString(),
@@ -35,63 +35,54 @@ const TaskList = () => {
             completed: false,
         };
         setTasks([...tasks, newTask]);
-
-        console.log('Adding task to server:', newTask);
+        console.log('Adding task:', newTask);
     };
 
-    // Function to toggle the completion status of a task
     const toggleComplete = (id: string) => {
         setTasks(
             tasks.map(task =>
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
         );
-
-        console.log(`Toggling completion status for task with id: ${id}`);
+        console.log(`Toggling completion for task id: ${id}`);
     };
 
-    // Function to delete a task with Undo functionality
     const deleteTask = (id: string) => {
         const taskToDelete = tasks.find(task => task.id === id);
         if (!taskToDelete) return;
 
-        setDeletedTask(taskToDelete); // Temporarily store the deleted task
-        setTasks(tasks.filter(task => task.id !== id)); // Remove the task from the list
-        setIsUndoVisible(true); // Show the Undo button
+        setDeletedTask(taskToDelete);
+        setTasks(tasks.filter(task => task.id !== id));
+        setIsUndoVisible(true);
 
-        // Clear any existing timer
         if (undoTimer) clearTimeout(undoTimer);
 
-        // Automatically remove the deleted task after 5 seconds if not restored
         const timer = setTimeout(() => {
-            setIsUndoVisible(false); // Hide the Undo button
-            setDeletedTask(null); // Permanently remove the deleted task
-            console.log(`Deleted task permanently from server: ${taskToDelete.id}`);
+            setIsUndoVisible(false);
+            setDeletedTask(null);
+            console.log(`Deleted task permanently: ${taskToDelete.id}`);
         }, 5000);
 
-        setUndoTimer(timer); // Store the timer in state
+        setUndoTimer(timer);
     };
 
-    // Function to restore the deleted task
     const undoDelete = () => {
         if (deletedTask) {
-            setTasks([...tasks, deletedTask]); // Restore the deleted task
-            setDeletedTask(null); // Clear the deleted task state
-            setIsUndoVisible(false); // Hide the Undo button
-            console.log('Task restored:', deletedTask);
-            if (undoTimer) clearTimeout(undoTimer); // Clear the timer
+            setTasks([...tasks, deletedTask]);
+            setDeletedTask(null);
+            setIsUndoVisible(false);
+            console.log('Restored task:', deletedTask);
+            if (undoTimer) clearTimeout(undoTimer);
         }
     };
 
-    // Function to edit a task
     const editTask = (id: string, title: string, description: string) => {
         setTasks(
             tasks.map(task =>
                 task.id === id ? { ...task, title, description } : task
             )
         );
-
-        console.log(`Editing task with id: ${id}`, { title, description });
+        console.log(`Editing task id: ${id}`, { title, description });
     };
 
     return (
@@ -104,12 +95,11 @@ const TaskList = () => {
                         task={task}
                         onToggleComplete={toggleComplete}
                         onDelete={deleteTask}
-                        onEdit={editTask}  // Make sure to pass the editTask function
+                        onEdit={editTask}
                     />
                 ))}
             </div>
 
-            {/* Undo Button and message for restoring deleted tasks as a floating dialog */}
             {isUndoVisible && (
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-6 rounded-lg border text-center z-50">
                     <p className="text-red-600 font-bold mb-4">
