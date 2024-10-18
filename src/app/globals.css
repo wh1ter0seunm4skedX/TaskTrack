@@ -31,6 +31,7 @@ body {
     }
 }
 
+/* Animations */
 @keyframes gradient-x {
     0% {
         background-position: 0% 50%;
@@ -45,6 +46,26 @@ body {
 
 .animate-gradient-x {
     animation: gradient-x 15s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes dark-gradient-x {
+    0% {
+        background-position: 0% 50%;
+        background-color: #0a0a0a;
+    }
+    50% {
+        background-position: 100% 50%;
+        background-color: #1a1a1a;
+    }
+    100% {
+        background-position: 0% 50%;
+        background-color: #2a2a2a;
+    }
+}
+
+.animate-dark-gradient-x {
+    animation: dark-gradient-x 15s ease infinite;
     background-size: 200% 200%;
 }
 
