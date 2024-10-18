@@ -1,0 +1,12 @@
+{
+  "taskTrackTitle": "TaskTrack - Manage Your Tasks",
+  "taskTrackSubtitle": "Add, edit, and manage your daily tasks with style.",
+  "addTask": "Add Task",
+  "editTask": "Edit",
+  "deleteTask": "Delete",
+  "markComplete": "Mark as Complete",
+  "markIncomplete": "Mark as Incomplete",
+  "saveChanges": "Save Changes",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode"
+}

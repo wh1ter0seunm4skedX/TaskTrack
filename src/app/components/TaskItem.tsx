@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Task } from '../types';
 import TaskModal from './TaskModal';
 
-const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpenModal, onCloseModal }: {
+const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpenModal, onCloseModal, translations }: {
     task: Task,
     onToggleComplete: (id: string) => void,
     onDelete: (id: string) => void,
@@ -10,6 +10,7 @@ const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpe
     isModalOpen: boolean,
     onOpenModal: () => void,
     onCloseModal: () => void,
+    translations: any
 }) => {
     const [editedTitle, setEditedTitle] = useState(task.title);
     const [editedDescription, setEditedDescription] = useState(task.description);
@@ -36,8 +37,12 @@ const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpe
                 }}
                 onToggleComplete={() => onToggleComplete(task.id)}
                 isCompleted={task.completed}
+                onSave={handleSave}
+                translations={translations} // Pass translations down to the modal
             >
-                <h2 className="text-xl font-bold mb-4">Edit Task</h2>
+                <h2 className="text-xl font-bold mb-4">
+                    {translations && translations.editTask ? translations.editTask : 'Edit Task'}
+                </h2>
                 <input
                     className="border p-2 w-full mb-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={editedTitle}
@@ -53,13 +58,13 @@ const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpe
                         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
                         onClick={handleSave}
                     >
-                        Save
+                        {translations && translations.saveChanges ? translations.saveChanges : 'Save Changes'}
                     </button>
                     <button
                         className="bg-gray-500 text-white p-2 rounded hover:bg-gray-600 transition-colors"
                         onClick={onCloseModal}
                     >
-                        Cancel
+                        {translations && translations.cancel ? translations.cancel : 'Cancel'}
                     </button>
                 </div>
             </TaskModal>

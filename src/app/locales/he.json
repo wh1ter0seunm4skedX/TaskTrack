@@ -1,0 +1,12 @@
+{
+  "taskTrackTitle": "TaskTrack - ניהול המשימות שלך",
+  "taskTrackSubtitle": "הוסף, ערוך וניהול משימות יומיומיות בקלות.",
+  "addTask": "הוסף משימה",
+  "editTask": "ערוך",
+  "deleteTask": "מחק",
+  "markComplete": "סמן כהושלם",
+  "markIncomplete": "סמן כלא הושלם",
+  "saveChanges": "שמור שינויים",
+  "darkMode": "מצב כהה",
+  "lightMode": "מצב רגיל"
+}

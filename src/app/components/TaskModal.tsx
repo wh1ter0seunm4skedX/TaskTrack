@@ -8,9 +8,10 @@ interface TaskModalProps {
     isCompleted: boolean;
     onSave: () => void;
     children: ReactNode;
+    translations: any;
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onToggleComplete, isCompleted, onSave, children }) => {
+const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onToggleComplete, isCompleted, onSave, children, translations }) => {
     if (!isOpen) return null;
 
     return (
@@ -32,7 +33,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                         className={`p-2 rounded ${isCompleted ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white transition-colors`}
                         onClick={onToggleComplete}
                     >
-                        {isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'}
+                        {isCompleted ? translations.markIncomplete : translations.markComplete}
                     </button>
 
                     {/* Save button - Center aligned */}
@@ -40,7 +41,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors mx-auto"
                         onClick={onSave}
                     >
-                        Save Changes
+                        {translations.saveChanges}
                     </button>
 
                     {/* Delete button - Right aligned */}
@@ -48,7 +49,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                         className="bg-red-700 text-white p-2 rounded hover:bg-red-800 transition-colors"
                         onClick={onDelete}
                     >
-                        Delete Task
+                        {translations.deleteTask}
                     </button>
                 </div>
             </div>

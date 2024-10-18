@@ -6,7 +6,7 @@ import TaskItem from './TaskItem';
 import TaskModal from './TaskModal';
 import { Task } from '../types';
 
-const TaskList = () => {
+const TaskList = ({ translations }: { translations: any }) => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
     const [deletedTask, setDeletedTask] = useState<Task | null>(null);
@@ -15,16 +15,16 @@ const TaskList = () => {
     const [editedTitle, setEditedTitle] = useState('');
     const [editedDescription, setEditedDescription] = useState('');
 
+    // Load simulated tasks on initial render
     useEffect(() => {
         const loadTasks = async () => {
-            console.log('Loading tasks...');
-            const response: Task[] = [
+            const simulatedTasks: Task[] = [
                 { id: '1', title: 'Apply for a full-stack developer job in a cool place', description: 'Complete and submit the job application.', completed: true },
                 { id: '2', title: 'Get the cool job!', description: 'Celebrate the new opportunity!', completed: true },
                 { id: '3', title: 'Get to know the team and show them your skills!', description: 'Prepare to contribute and impress.', completed: false },
             ];
 
-            setTasks(response);
+            setTasks(simulatedTasks);
         };
 
         loadTasks().catch(console.error);
@@ -37,32 +37,30 @@ const TaskList = () => {
             description,
             completed: false,
         };
-        setTasks([...tasks, newTask]);
+        // Update the task list with the new task
+        setTasks(prevTasks => [...prevTasks, newTask]);
         console.log('Adding task:', newTask);
     };
 
     const toggleComplete = (id: string) => {
-        setTasks(
-            tasks.map(task =>
+        setTasks(prevTasks =>
+            prevTasks.map(task =>
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
         );
         console.log(`Toggling completion for task id: ${id}`);
     };
 
-    // Delete task with Grace time for undo
     const deleteTask = (id: string) => {
         const taskToDelete = tasks.find(task => task.id === id);
         if (!taskToDelete) return;
 
         setDeletedTask(taskToDelete);
-        setTasks(tasks.filter(task => task.id !== id));
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
         setIsUndoVisible(true);
 
-        // Clear any existing timer
         if (undoTimer) clearTimeout(undoTimer);
 
-        // Automatically remove the deleted task after 5 seconds if not restored
         const timer = setTimeout(() => {
             setIsUndoVisible(false);
             setDeletedTask(null);
@@ -72,10 +70,9 @@ const TaskList = () => {
         setUndoTimer(timer);
     };
 
-    // Function to restore the deleted task
     const undoDelete = () => {
         if (deletedTask) {
-            setTasks([...tasks, deletedTask]);
+            setTasks(prevTasks => [...prevTasks, deletedTask]);
             setDeletedTask(null);
             setIsUndoVisible(false);
             console.log('Task restored:', deletedTask);
@@ -84,8 +81,8 @@ const TaskList = () => {
     };
 
     const editTask = (id: string, title: string, description: string) => {
-        setTasks(
-            tasks.map(task =>
+        setTasks(prevTasks =>
+            prevTasks.map(task =>
                 task.id === id ? { ...task, title, description } : task
             )
         );
@@ -116,7 +113,7 @@ const TaskList = () => {
 
     return (
         <div className="p-4">
-            <TaskInput onAddTask={addTask} />
+            <TaskInput onAddTask={addTask} translations={translations} />
             <div className="mt-4">
                 {tasks.map(task => (
                     <TaskItem
@@ -126,11 +123,11 @@ const TaskList = () => {
                         onDelete={deleteTask}
                         onEdit={editTask}
                         onOpenModal={() => openModal(task.id)}
+                        translations={translations}
                     />
                 ))}
             </div>
 
-            {/* Render the TaskModal only when there's an active task */}
             {activeTask && (
                 <TaskModal
                     isOpen={!!activeTaskId}
@@ -142,8 +139,9 @@ const TaskList = () => {
                     onToggleComplete={() => toggleComplete(activeTask.id)}
                     isCompleted={activeTask.completed}
                     onSave={saveTaskChanges}
+                    translations={translations}
                 >
-                    <h2 className="text-xl font-bold mb-4">Edit Task</h2>
+                    <h2 className="text-xl font-bold mb-4">{translations.editTask}</h2>
                     <input
                         className="border p-2 w-full mb-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                         value={editedTitle}
@@ -157,17 +155,16 @@ const TaskList = () => {
                 </TaskModal>
             )}
 
-            {/* Undo Button and message for restoring deleted tasks */}
             {isUndoVisible && (
                 <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-6 rounded-lg border text-center z-50">
                     <p className="text-red-600 font-bold mb-4">
-                        The task has been deleted! Click undo within 5 seconds to restore it.
+                        {translations.deletedMessage}
                     </p>
                     <button
                         className="bg-yellow-500 text-white p-2 transition-transform transform hover:scale-105 rounded"
                         onClick={undoDelete}
                     >
-                        Undo Delete
+                        {translations.undoDelete}
                     </button>
                 </div>
             )}
