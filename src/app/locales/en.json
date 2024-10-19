@@ -18,5 +18,7 @@
   "timeSpent": "Time Spent",
   "taskButtonLoading": "Adding...",
   "taskAddedMessage": "Task added successfully:",
-  "errorMessage": "Failed to add task. Do you want to try again?"
+  "errorMessage": "Failed to add task. Do you want to try again?",
+  "duplicateTaskMessage": "Task with the same title and description already exists.",
+  "buttonLockedMessage": "Please wait 5 seconds..."
 }

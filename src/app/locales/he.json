@@ -18,6 +18,8 @@
   "timeSpent": "זמן שחלף",
   "taskButtonLoading": "מוסיף...",
   "taskAddedMessage": "המשימה נוספה בהצלחה:",
-  "errorMessage": "הוספת המשימה נכשלה. האם תרצה לנסות שוב?"
+  "errorMessage": "הוספת המשימה נכשלה. האם תרצה לנסות שוב?",
+  "duplicateTaskMessage": "משימה עם אותה כותרת ותיאור כבר קיימת.",
+  "buttonLockedMessage": "אנא המתן 5 שניות..."
 
 }

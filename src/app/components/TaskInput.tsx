@@ -10,13 +10,15 @@ const HALF_ROTATION_RANGE = ROTATION_RANGE / 2;
 
 const NOTIFICATION_TTL = 5000;  // Notification time to live
 
-const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, description: string) => void, translations: any }) => {
+const TaskInput = ({ onAddTask, tasks = [], translations }: { onAddTask: (title: string, description: string) => void, tasks: any[], translations: any }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [retryAction, setRetryAction] = useState<() => void | null>(null);
     const [notifications, setNotifications] = useState<any[]>([]);  // To handle notifications
+    const [isButtonLocked, setIsButtonLocked] = useState(false); // Button lock state
+    const [lockMessage, setLockMessage] = useState(''); // Lock message for button
 
     const ref = useRef(null);
 
@@ -57,7 +59,15 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
     const handleAddTask = async () => {
         if (!title || !description) return;
 
+        // Check for duplicate task
+        const isDuplicate = tasks.some(task => task.title === title && task.description === description);
+        if (isDuplicate) {
+            setError(translations.duplicateTaskMessage);
+            return;
+        }
+
         setLoading(true);
+        setIsButtonLocked(true); // Lock button
 
         try {
             const response = await axios.post('/api/tasks', { title, description });
@@ -71,6 +81,12 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
             setRetryAction(() => handleAddTask);
         } finally {
             setLoading(false);
+            // Lock the button for 5 seconds
+            setLockMessage(translations.buttonLockedMessage);
+            setTimeout(() => {
+                setIsButtonLocked(false); // Unlock button after 5 seconds
+                setLockMessage('');
+            }, 5000);
         }
     };
 
@@ -114,7 +130,7 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
             <motion.div
                 ref={ref}
                 onMouseMove={handleMouseMove}
-                //onMouseLeave={handleMouseLeave}
+               // onMouseLeave={handleMouseLeave}
                 style={{
                     transformStyle: 'preserve-3d',
                     transform,
@@ -141,11 +157,11 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
                     className={`rounded-2xl border-2 border-dashed border-blue-500 bg-white dark:bg-gray-800 px-6 py-3 w-full font-semibold uppercase text-blue-500 dark:text-white transition-all duration-300 
                     hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_blue] 
                     active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none 
-                    ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
+                    ${loading || isButtonLocked ? 'cursor-not-allowed opacity-50' : ''}`}
                     onClick={handleAddTask}
-                    disabled={loading}
+                    disabled={loading || isButtonLocked}
                 >
-                    {loading ? translations.taskButtonLoading : translations.taskButton}
+                    {loading ? translations.taskButtonLoading : (isButtonLocked ? lockMessage : translations.taskButton)}
                 </button>
             </motion.div>
         </>

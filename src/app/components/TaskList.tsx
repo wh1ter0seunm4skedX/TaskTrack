@@ -131,7 +131,7 @@ const TaskList = ({ translations }: { translations: any }) => {
                     onClose={() => setError(null)}
                 />
             )}
-            <TaskInput onAddTask={addTask} translations={translations} />
+            <TaskInput onAddTask={addTask} tasks={tasks} translations={translations} />
             <div className="mt-4">
                 {tasks.map(task => (
                     <TaskItem
