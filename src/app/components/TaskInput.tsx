@@ -32,7 +32,7 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
                 className="bg-blue-500 text-white p-3 w-full rounded hover:bg-blue-600 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 onClick={handleAddTask}
             >
-                {translations.addTask}
+                {translations.taskButton}
             </button>
         </div>
     );

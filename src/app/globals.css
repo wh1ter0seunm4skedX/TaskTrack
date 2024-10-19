@@ -113,3 +113,7 @@ body {
 input:checked~.dot {
     transform: translateX(100%);
 }
+.rtl {
+    direction: rtl;
+    text-align: right;
+}

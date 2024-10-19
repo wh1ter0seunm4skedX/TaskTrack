@@ -1,4 +1,4 @@
-'use client'; // Ensures this is a Client Component
+'use client';
 
 import TaskList from './components/TaskList';
 import { useEffect, useState } from 'react';
@@ -27,35 +27,30 @@ export default function Home() {
     };
 
     return (
-        <div
-            className={`relative flex flex-col items-center justify-center min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] ${isDarkMode ? 'animate-dark-gradient-x' : 'animate-gradient-x'} ${isDarkMode ? 'bg-gray-800' : 'bg-gradient-to-r from-pink-100 via-white to-pink-200'}`}>
+        <div className={`relative flex flex-col items-center justify-center min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)] 
+            ${isDarkMode ? 'animate-dark-gradient-x' : 'animate-gradient-x'} 
+            ${isDarkMode ? 'bg-gray-800' : 'bg-gradient-to-r from-pink-100 via-white to-pink-200'} 
+            ${language === 'he' ? 'rtl' : ''}`}>
+
             {/* Floating background shapes */}
             <div className="absolute inset-0 flex justify-center items-center">
-                <div
-                    className={`absolute ${isDarkMode ? 'bg-gray-700' : 'bg-gradient-to-r from-pink-200 to-white'} w-72 h-72 rounded-full blur-3xl opacity-30 animate-floating-slow`}/>
-                <div
-                    className={`absolute ${isDarkMode ? 'bg-gray-600' : 'bg-gradient-to-r from-pink-300 to-white'} w-64 h-64 rounded-full blur-3xl opacity-40 animate-floating-fast`}/>
+                <div className={`absolute ${isDarkMode ? 'bg-gray-700' : 'bg-gradient-to-r from-pink-200 to-white'} w-72 h-72 rounded-full blur-3xl opacity-30 animate-floating-slow`} />
+                <div className={`absolute ${isDarkMode ? 'bg-gray-600' : 'bg-gradient-to-r from-pink-300 to-white'} w-64 h-64 rounded-full blur-3xl opacity-40 animate-floating-fast`} />
             </div>
 
             {/* Main content */}
             <header className="mb-8 text-center z-10">
                 <h1 className="text-5xl font-extrabold text-gray-800 tracking-wide dark:text-white">
-                    {translations.taskTrackTitle.split('-')[0]} -
-                    <span
-                        className="underline underline-offset-3 decoration-8 decoration-blue-400 dark:decoration-blue-600">
-            {translations.taskTrackTitle.split('-')[1]}
-        </span>
+                    {translations.taskTrackTitle}
                 </h1>
                 <p className="text-gray-600 mt-4 dark:text-gray-300">
                     {translations.taskTrackSubtitle}
                 </p>
             </header>
 
-
             {/* TaskList Component - Core of the application */}
-            <main
-                className="w-full max-w-2xl z-10 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg transition-transform transform hover:scale-105 dark:bg-gray-700 dark:bg-opacity-90">
-                <TaskList translations={translations}/>
+            <main className="w-full max-w-2xl z-10 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg transition-transform transform hover:scale-105 dark:bg-gray-700 dark:bg-opacity-90">
+                <TaskList translations={translations} />
             </main>
 
             {/* Dark Mode Toggle Button */}
@@ -95,7 +90,6 @@ export default function Home() {
                     </div>
                 </label>
             </div>
-
 
             {/* Footer */}
             <footer className="mt-12 text-center text-sm text-gray-500 z-10 dark:text-gray-400">
