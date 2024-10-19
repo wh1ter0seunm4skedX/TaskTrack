@@ -47,6 +47,8 @@ const TaskInput = ({ onAddTask, tasks = [], translations }: { onAddTask: (title:
         y.set(rY);
     };
 
+
+    // Function to add notification when a task is successfully added
     const addNotification = (taskTitle: string) => {
         const id = Math.random();
         setNotifications((prev) => [{ id, text: `${translations.taskAddedMessage} "${taskTitle}"`, taskTitle }, ...prev]);
@@ -56,10 +58,10 @@ const TaskInput = ({ onAddTask, tasks = [], translations }: { onAddTask: (title:
         }, NOTIFICATION_TTL);
     };
 
+    // Handle task addition with error handling and duplicate checks
     const handleAddTask = async () => {
         if (!title || !description) return;
 
-        // Check for duplicate task
         const isDuplicate = tasks.some(task => task.title === title && task.description === description);
         if (isDuplicate) {
             setError(translations.duplicateTaskMessage);
@@ -81,10 +83,9 @@ const TaskInput = ({ onAddTask, tasks = [], translations }: { onAddTask: (title:
             setRetryAction(() => handleAddTask);
         } finally {
             setLoading(false);
-            // Lock the button for 5 seconds
             setLockMessage(translations.buttonLockedMessage);
             setTimeout(() => {
-                setIsButtonLocked(false); // Unlock button after 5 seconds
+                setIsButtonLocked(false);
                 setLockMessage('');
             }, 5000);
         }

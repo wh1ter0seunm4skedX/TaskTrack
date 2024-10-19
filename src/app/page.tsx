@@ -15,7 +15,7 @@ export default function Home() {
     const translations = language === 'en' ? en : he;
 
     useEffect(() => {
-        // Fetch the motivational quote
+        // Fetches a motivational quote from an external API
         const fetchQuote = async () => {
             try {
                 const response = await axios.get('https://api.api-ninjas.com/v1/quotes?category=inspirational', {
@@ -33,11 +33,11 @@ export default function Home() {
 
         fetchQuote();
 
-        // Fetch tasks from our Firebase API
+        // Fetches tasks from the Firebase API
         const fetchTasks = async () => {
             try {
                 const response = await axios.get('/api/tasks');
-                setTasks(response.data); // Setting tasks fetched from Firestore
+                setTasks(response.data); ; // Populate tasks from the API response
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }
@@ -46,12 +46,14 @@ export default function Home() {
         fetchTasks();
     }, []);
 
+    // Toggles dark mode on and off, saves preference in localStorage
     const toggleDarkMode = () => {
         setIsDarkMode(!isDarkMode);
         document.body.classList.toggle('dark');
         localStorage.setItem('theme', !isDarkMode ? 'dark' : 'light');
     };
 
+    // Switches between English and Hebrew
     const toggleLanguage = () => {
         setLanguage(language === 'en' ? 'he' : 'en');
     };

@@ -15,6 +15,7 @@ const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpe
     const [editedTitle, setEditedTitle] = useState(task.title);
     const [editedDescription, setEditedDescription] = useState(task.description);
 
+    // Save the edited task and close the modal
     const handleSave = () => {
         onEdit(task.id, editedTitle, editedDescription);
         onCloseModal();
@@ -38,7 +39,7 @@ const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpe
                 onToggleComplete={() => onToggleComplete(task.id)}
                 isCompleted={task.completed}
                 onSave={handleSave}
-                translations={translations} // Pass translations down to the modal
+                translations={translations}
             >
                 <h2 className="text-xl font-bold mb-4">
                     {translations && translations.editTask ? translations.editTask : 'Edit Task'}

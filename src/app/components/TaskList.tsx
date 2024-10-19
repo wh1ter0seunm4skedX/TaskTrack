@@ -17,7 +17,7 @@ const TaskList = ({ translations }: { translations: any }) => {
     const [error, setError] = useState<string | null>(null);  // Error state
     const [retryAction, setRetryAction] = useState<() => void | null>(null);  // Store retry function
 
-    // Fetch tasks from API on component mount
+    // Fetch tasks from API when component mounts
     useEffect(() => {
         const fetchTasks = async () => {
             try {
@@ -43,7 +43,7 @@ const TaskList = ({ translations }: { translations: any }) => {
         }
     };
 
-    // Edit task (PUT request)
+    // Edit an existing task (PUT request)
     const editTask = async (id: string, title: string, description: string, completed: boolean) => {
         try {
             await axios.put('/api/tasks', { id, title, description, completed });
@@ -54,7 +54,7 @@ const TaskList = ({ translations }: { translations: any }) => {
         }
     };
 
-    // Delete task (DELETE request)
+    // Delete a task (DELETE request) with undo capability
     const deleteTask = async (id: string) => {
         const taskToDelete = tasks.find(task => task.id === id);
         if (!taskToDelete) return;
@@ -80,7 +80,7 @@ const TaskList = ({ translations }: { translations: any }) => {
         setUndoTimer(timer);
     };
 
-    // Undo delete action
+    // Undo the delete action
     const undoDelete = () => {
         if (deletedTask) {
             setTasks([...tasks, deletedTask]);
@@ -90,6 +90,7 @@ const TaskList = ({ translations }: { translations: any }) => {
         }
     };
 
+    // Toggle the completion status of a task
     const toggleComplete = (id: string) => {
         const taskToToggle = tasks.find(task => task.id === id);
         if (taskToToggle) {
@@ -97,6 +98,7 @@ const TaskList = ({ translations }: { translations: any }) => {
         }
     };
 
+    // Open the task editing modal
     const openModal = (id: string) => {
         setActiveTaskId(id);
         const task = tasks.find(task => task.id === id);
@@ -106,10 +108,12 @@ const TaskList = ({ translations }: { translations: any }) => {
         }
     };
 
+    // Close the task editing modal
     const closeModal = () => {
         setActiveTaskId(null);
     };
 
+    // Save task changes after editing
     const saveTaskChanges = () => {
         if (activeTaskId) {
             const taskToEdit = tasks.find(task => task.id === activeTaskId);

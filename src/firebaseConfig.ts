@@ -1,13 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
+// Use environment variables for Firebase configuration (Shh.. It's a secret 🤭)
 const firebaseConfig = {
-    apiKey: "AIzaSyBc3RBtqk0jRKvrAuIHNfguDBZasEreRgQ",
-    authDomain: "tasktrack-4d529.firebaseapp.com",
-    projectId: "tasktrack-4d529",
-    storageBucket: "tasktrack-4d529.appspot.com",
-    messagingSenderId: "688660059828",
-    appId: "1:688660059828:web:be1e5de089bc3bd9c4a9e1"
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);

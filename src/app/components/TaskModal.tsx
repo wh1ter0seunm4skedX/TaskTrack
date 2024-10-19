@@ -23,7 +23,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
             document.body.style.overflow = 'auto';
         }
 
-        // Cleanup on modal close
+        // Cleanup body overflow on modal close
         return () => {
             document.body.style.overflow = 'auto';
         };
