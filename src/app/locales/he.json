@@ -15,6 +15,9 @@
   "undoDeleteMessage": "למחוק את המשימה בוודאות?🤨",
   "undoDeleteButton": "בטל מחיקה",
   "startTimer": "התחל טיימר",
-  "timeSpent": "זמן שחלף"
+  "timeSpent": "זמן שחלף",
+  "taskButtonLoading": "מוסיף...",
+  "taskAddedMessage": "המשימה נוספה בהצלחה:",
+  "errorMessage": "הוספת המשימה נכשלה. האם תרצה לנסות שוב?"
 
 }

@@ -15,5 +15,8 @@
   "undoDeleteMessage": "Are you sure you want to delete it?\uD83E\uDD28",
   "undoDeleteButton": "Undo Delete",
   "startTimer": "Start Timer",
-  "timeSpent": "Time Spent"
+  "timeSpent": "Time Spent",
+  "taskButtonLoading": "Adding...",
+  "taskAddedMessage": "Task added successfully:",
+  "errorMessage": "Failed to add task. Do you want to try again?"
 }

@@ -2,16 +2,21 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion';
 import ErrorModal from './ErrorModal'; // Import the error modal component
+import { FiCheckSquare, FiX } from "react-icons/fi";
+import { AnimatePresence } from "framer-motion";
 
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = ROTATION_RANGE / 2;
+
+const NOTIFICATION_TTL = 5000;  // Notification time to live
 
 const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, description: string) => void, translations: any }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null); // Error state
-    const [retryAction, setRetryAction] = useState<() => void | null>(null); // Store retry action
+    const [error, setError] = useState<string | null>(null);
+    const [retryAction, setRetryAction] = useState<() => void | null>(null);
+    const [notifications, setNotifications] = useState<any[]>([]);  // To handle notifications
 
     const ref = useRef(null);
 
@@ -40,9 +45,13 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
         y.set(rY);
     };
 
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
+    const addNotification = (taskTitle: string) => {
+        const id = Math.random();
+        setNotifications((prev) => [{ id, text: `${translations.taskAddedMessage} "${taskTitle}"`, taskTitle }, ...prev]);
+
+        setTimeout(() => {
+            setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+        }, NOTIFICATION_TTL);
     };
 
     const handleAddTask = async () => {
@@ -55,10 +64,11 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
             onAddTask(response.data.title, response.data.description);
             setTitle('');
             setDescription('');
+            addNotification(response.data.title);  // Notify with task title
         } catch (error) {
             console.error('Error adding task:', error);
-            setError('Failed to add task. Do you want to try again?');
-            setRetryAction(() => handleAddTask); // Set the retry action
+            setError(translations.errorMessage);
+            setRetryAction(() => handleAddTask);
         } finally {
             setLoading(false);
         }
@@ -66,6 +76,7 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
 
     return (
         <>
+            {/* Error Modal */}
             {error && (
                 <ErrorModal
                     errorMessage={error}
@@ -73,10 +84,37 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
                     onClose={() => setError(null)}
                 />
             )}
+
+            {/* Notifications */}
+            <div className="fixed top-4 right-4 z-50 pointer-events-none">
+                <AnimatePresence>
+                    {notifications.map((notif) => (
+                        <motion.div
+                            key={notif.id}
+                            initial={{ y: -15, scale: 0.95 }}
+                            animate={{ y: 0, scale: 1 }}
+                            exit={{ x: "100%", opacity: 0 }}
+                            transition={{ duration: 0.35, ease: "easeOut" }}
+                            className="p-2 flex items-start rounded gap-2 text-xs font-medium shadow-lg text-white bg-indigo-500 pointer-events-auto"
+                        >
+                            <FiCheckSquare className="mt-0.5" />
+                            <span>{notif.text}</span>
+                            <button
+                                onClick={() => setNotifications((prev) => prev.filter((n) => n.id !== notif.id))}
+                                className="ml-auto mt-0.5"
+                            >
+                                <FiX />
+                            </button>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </div>
+
+            {/* Task Input Form */}
             <motion.div
                 ref={ref}
                 onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+                //onMouseLeave={handleMouseLeave}
                 style={{
                     transformStyle: 'preserve-3d',
                     transform,
