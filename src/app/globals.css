@@ -109,3 +109,7 @@ body {
 .animate-modal-open {
     animation: modal-open 0.3s ease-out forwards;
 }
+
+input:checked~.dot {
+    transform: translateX(100%);
+}
