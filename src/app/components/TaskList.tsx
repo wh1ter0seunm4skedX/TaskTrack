@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import TaskInput from './TaskInput';
 import TaskItem from './TaskItem';
@@ -15,16 +13,16 @@ const TaskList = ({ translations }: { translations: any }) => {
     const [editedTitle, setEditedTitle] = useState('');
     const [editedDescription, setEditedDescription] = useState('');
 
-    // Load simulated tasks on initial render
     useEffect(() => {
         const loadTasks = async () => {
-            const simulatedTasks: Task[] = [
+            console.log('Loading tasks...');
+            const response: Task[] = [
                 { id: '1', title: 'Apply for a full-stack developer job in a cool place', description: 'Complete and submit the job application.', completed: true },
                 { id: '2', title: 'Get the cool job!', description: 'Celebrate the new opportunity!', completed: true },
                 { id: '3', title: 'Get to know the team and show them your skills!', description: 'Prepare to contribute and impress.', completed: false },
             ];
 
-            setTasks(simulatedTasks);
+            setTasks(response);
         };
 
         loadTasks().catch(console.error);
@@ -37,14 +35,13 @@ const TaskList = ({ translations }: { translations: any }) => {
             description,
             completed: false,
         };
-        // Update the task list with the new task
-        setTasks(prevTasks => [...prevTasks, newTask]);
+        setTasks([...tasks, newTask]);
         console.log('Adding task:', newTask);
     };
 
     const toggleComplete = (id: string) => {
-        setTasks(prevTasks =>
-            prevTasks.map(task =>
+        setTasks(
+            tasks.map(task =>
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
         );
@@ -56,7 +53,7 @@ const TaskList = ({ translations }: { translations: any }) => {
         if (!taskToDelete) return;
 
         setDeletedTask(taskToDelete);
-        setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+        setTasks(tasks.filter(task => task.id !== id));
         setIsUndoVisible(true);
 
         if (undoTimer) clearTimeout(undoTimer);
@@ -72,7 +69,7 @@ const TaskList = ({ translations }: { translations: any }) => {
 
     const undoDelete = () => {
         if (deletedTask) {
-            setTasks(prevTasks => [...prevTasks, deletedTask]);
+            setTasks([...tasks, deletedTask]);
             setDeletedTask(null);
             setIsUndoVisible(false);
             console.log('Task restored:', deletedTask);
@@ -81,8 +78,8 @@ const TaskList = ({ translations }: { translations: any }) => {
     };
 
     const editTask = (id: string, title: string, description: string) => {
-        setTasks(prevTasks =>
-            prevTasks.map(task =>
+        setTasks(
+            tasks.map(task =>
                 task.id === id ? { ...task, title, description } : task
             )
         );
@@ -156,15 +153,15 @@ const TaskList = ({ translations }: { translations: any }) => {
             )}
 
             {isUndoVisible && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg p-6 rounded-lg border text-center z-50">
-                    <p className="text-red-600 font-bold mb-4">
-                        {translations.deletedMessage}
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-red-200 p-3 rounded shadow-inner text-center z-50">
+                    <p className="mb-4">
+                        {translations.undoDeleteMessage}
                     </p>
                     <button
-                        className="bg-yellow-500 text-white p-2 transition-transform transform hover:scale-105 rounded"
+                        className="bg-yellow-500 text-white p-2 rounded transition-transform hover:scale-105"
                         onClick={undoDelete}
                     >
-                        {translations.undoDelete}
+                        {translations.undoDeleteButton}
                     </button>
                 </div>
             )}

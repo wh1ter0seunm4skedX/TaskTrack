@@ -4,12 +4,14 @@
   "taskTitle": "Task Title",
   "taskDescription": "Task Description",
   "addTask": "Add Task ✍️",
-  "editTask": "Edit ✏\uFE0F",
+  "editTask": "Edit ✏️",
   "deleteTask": "Delete ❌",
-  "taskButton": "Common! Let's go! \uD83D\uDCA8 ",
-  "markComplete": "Mark as Complete \uD83E\uDD17",
-  "markIncomplete": "Mark as Incomplete \uD83D\uDE10",
-  "saveChanges": "Save Changes \uD83D\uDCBE",
+  "taskButton": "Common! Let's go! 💨 ",
+  "markComplete": "Mark as Complete 🥳",
+  "markIncomplete": "Mark as Incomplete 😐",
+  "saveChanges": "Save Changes 💾",
   "darkMode": "Dark Mode",
-  "lightMode": "Light Mode"
+  "lightMode": "Light Mode",
+  "undoDeleteMessage": "Are you sure you want to delete it?\uD83E\uDD28",
+  "undoDeleteButton": "Undo Delete"
 }

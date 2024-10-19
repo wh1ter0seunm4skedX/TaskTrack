@@ -17,7 +17,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
             <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative z-50 animate-modal-open">
-                {/* Larger X button for closing */}
                 <button
                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors text-3xl"
                     onClick={onClose}
@@ -28,7 +27,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                 {children}
 
                 <div className="mt-4 flex justify-between items-center">
-                    {/* Complete/incomplete button - Left aligned */}
                     <button
                         className={`p-2 rounded ${isCompleted ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white transition-colors`}
                         onClick={onToggleComplete}
@@ -36,7 +34,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                         {isCompleted ? translations.markIncomplete : translations.markComplete}
                     </button>
 
-                    {/* Save button - Center aligned */}
                     <button
                         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors mx-auto"
                         onClick={onSave}
@@ -44,7 +41,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onTogg
                         {translations.saveChanges}
                     </button>
 
-                    {/* Delete button - Right aligned */}
                     <button
                         className="bg-red-700 text-white p-2 rounded hover:bg-red-800 transition-colors"
                         onClick={onDelete}
