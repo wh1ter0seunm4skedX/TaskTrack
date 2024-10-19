@@ -2,7 +2,7 @@
 
 import TaskList from './components/TaskList';
 import { useEffect, useState } from 'react';
-import axios, {AxiosRequestConfig} from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import en from './locales/en.json';
 import he from './locales/he.json';
 
@@ -11,6 +11,7 @@ export default function Home() {
     const [language, setLanguage] = useState('en');
     const [quote, setQuote] = useState('');
     const [author, setAuthor] = useState('');
+    const [tasks, setTasks] = useState([]);
     const translations = language === 'en' ? en : he;
 
     useEffect(() => {
@@ -29,7 +30,20 @@ export default function Home() {
                 console.error('Error fetching the quote:', error);
             }
         };
+
         fetchQuote();
+
+        // Fetch tasks from our Firebase API
+        const fetchTasks = async () => {
+            try {
+                const response = await axios.get('/api/tasks');
+                setTasks(response.data); // Setting tasks fetched from Firestore
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        };
+
+        fetchTasks();
     }, []);
 
     const toggleDarkMode = () => {
@@ -75,7 +89,7 @@ export default function Home() {
 
             {/* TaskList Component - Core of the application */}
             <main className="w-full max-w-2xl z-10 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg transition-transform transform hover:scale-105 dark:bg-gray-700 dark:bg-opacity-90">
-                <TaskList translations={translations} />
+                <TaskList tasks={tasks} translations={translations} />
             </main>
 
             {/* Dark Mode Toggle Button */}

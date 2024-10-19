@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import TaskInput from './TaskInput';
 import TaskItem from './TaskItem';
 import TaskModal from './TaskModal';
+import axios from 'axios'; // Import axios for API requests
 import { Task } from '../types';
 
 const TaskList = ({ translations }: { translations: any }) => {
@@ -13,19 +14,19 @@ const TaskList = ({ translations }: { translations: any }) => {
     const [editedTitle, setEditedTitle] = useState('');
     const [editedDescription, setEditedDescription] = useState('');
 
+    // Fetch tasks from API on component mount
     useEffect(() => {
-        const loadTasks = async () => {
-            console.log('Loading tasks...');
-            const response: Task[] = [
-                { id: '1', title: 'Apply for a full-stack developer job in a cool place', description: 'Complete and submit the job application.', completed: true },
-                { id: '2', title: 'Get the cool job!', description: 'Celebrate the new opportunity!', completed: true },
-                { id: '3', title: 'Get to know the team and show them your skills!', description: 'Prepare to contribute and impress.', completed: false },
-            ];
-
-            setTasks(response);
+        const fetchTasks = async () => {
+            try {
+                const response = await axios.get('/api/tasks');
+                setTasks(response.data); // Update state with tasks from Firestore
+                console.log('Tasks fetched:', response.data);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
         };
 
-        loadTasks().catch(console.error);
+        fetchTasks();
     }, []);
 
     const addTask = (title: string, description: string) => {
