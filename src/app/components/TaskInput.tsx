@@ -1,14 +1,30 @@
 import { useState } from 'react';
+import axios from 'axios';
 
 const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, description: string) => void, translations: any }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [loading, setLoading] = useState(false);  // Add loading state to show progress
 
-    const handleAddTask = () => {
-        if (title && description) {
-            onAddTask(title, description);
+    const handleAddTask = async () => {
+        if (!title || !description) return;
+
+        setLoading(true); // Set loading true when the request is being made
+
+        try {
+            // Make the API request to add a new task to Firestore
+            const response = await axios.post('/api/tasks', { title, description });
+
+            // Call onAddTask to update the UI with the newly added task
+            onAddTask(response.data.title, response.data.description);
+
+            // Clear the input fields
             setTitle('');
             setDescription('');
+        } catch (error) {
+            console.error('Error adding task:', error);
+        } finally {
+            setLoading(false);  // Set loading to false after request is finished
         }
     };
 
@@ -33,8 +49,9 @@ const TaskInput = ({ onAddTask, translations }: { onAddTask: (title: string, des
             <button
                 className="bg-blue-500 text-white p-3 w-full rounded hover:bg-blue-600 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 dark:bg-blue-700 dark:hover:bg-blue-800"
                 onClick={handleAddTask}
+                disabled={loading} // Disable button when loading
             >
-                {translations.taskButton}
+                {loading ? translations.taskButtonLoading : translations.taskButton}
             </button>
         </div>
     );

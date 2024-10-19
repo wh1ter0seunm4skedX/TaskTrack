@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import TaskInput from './TaskInput';
 import TaskItem from './TaskItem';
 import TaskModal from './TaskModal';
-import axios from 'axios'; // Import axios for API requests
+import axios from 'axios';
 import { Task } from '../types';
 
 const TaskList = ({ translations }: { translations: any }) => {
@@ -19,8 +19,7 @@ const TaskList = ({ translations }: { translations: any }) => {
         const fetchTasks = async () => {
             try {
                 const response = await axios.get('/api/tasks');
-                setTasks(response.data); // Update state with tasks from Firestore
-                console.log('Tasks fetched:', response.data);
+                setTasks(response.data);
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }
@@ -29,62 +28,69 @@ const TaskList = ({ translations }: { translations: any }) => {
         fetchTasks();
     }, []);
 
-    const addTask = (title: string, description: string) => {
-        const newTask: Task = {
-            id: Date.now().toString(),
-            title,
-            description,
-            completed: false,
-        };
-        setTasks([...tasks, newTask]);
-        console.log('Adding task:', newTask);
+    // Add a new task (POST request)
+    const addTask = async (title: string, description: string) => {
+        try {
+            const response = await axios.post('/api/tasks', { title, description, completed: false });
+            setTasks([...tasks, response.data]);
+            console.log('Task added:', response.data);
+        } catch (error) {
+            console.error('Error adding task:', error);
+        }
     };
 
-    const toggleComplete = (id: string) => {
-        setTasks(
-            tasks.map(task =>
-                task.id === id ? { ...task, completed: !task.completed } : task
-            )
-        );
-        console.log(`Toggling completion for task id: ${id}`);
+    // Edit task (PUT request)
+    const editTask = async (id: string, title: string, description: string, completed: boolean) => {
+        try {
+            await axios.put('/api/tasks', { id, title, description, completed });
+            setTasks(tasks.map(task => (task.id === id ? { ...task, title, description, completed } : task)));
+            console.log('Task updated:', id);
+        } catch (error) {
+            console.error('Error updating task:', error);
+        }
     };
 
-    const deleteTask = (id: string) => {
+    // Delete task (DELETE request)
+    const deleteTask = async (id: string) => {
         const taskToDelete = tasks.find(task => task.id === id);
         if (!taskToDelete) return;
 
         setDeletedTask(taskToDelete);
         setTasks(tasks.filter(task => task.id !== id));
-        setIsUndoVisible(true);
 
+        try {
+            await axios.delete('/api/tasks', { data: { id } });
+            console.log('Task deleted:', id);
+        } catch (error) {
+            console.error('Error deleting task:', error);
+        }
+
+        setIsUndoVisible(true);
         if (undoTimer) clearTimeout(undoTimer);
 
         const timer = setTimeout(() => {
             setIsUndoVisible(false);
             setDeletedTask(null);
-            console.log(`Deleted task permanently from server: ${taskToDelete.id}`);
         }, 5000);
 
         setUndoTimer(timer);
     };
 
+    // Undo delete action
     const undoDelete = () => {
         if (deletedTask) {
             setTasks([...tasks, deletedTask]);
             setDeletedTask(null);
             setIsUndoVisible(false);
-            console.log('Task restored:', deletedTask);
             if (undoTimer) clearTimeout(undoTimer);
         }
     };
 
-    const editTask = (id: string, title: string, description: string) => {
-        setTasks(
-            tasks.map(task =>
-                task.id === id ? { ...task, title, description } : task
-            )
-        );
-        console.log(`Editing task id: ${id}`, { title, description });
+    const toggleComplete = (id: string) => {
+        const taskToToggle = tasks.find(task => task.id === id);
+        if (taskToToggle) {
+            editTask(id, taskToToggle.title, taskToToggle.description, !taskToToggle.completed);
+        }
     };
 
     const openModal = (id: string) => {
@@ -102,8 +108,11 @@ const TaskList = ({ translations }: { translations: any }) => {
 
     const saveTaskChanges = () => {
         if (activeTaskId) {
-            editTask(activeTaskId, editedTitle, editedDescription);
-            closeModal();
+            const taskToEdit = tasks.find(task => task.id === activeTaskId);
+            if (taskToEdit) {
+                editTask(activeTaskId, editedTitle, editedDescription, taskToEdit.completed);
+                closeModal();
+            }
         }
     };
 
