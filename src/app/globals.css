@@ -117,3 +117,22 @@ input:checked~.dot {
     direction: rtl;
     text-align: right;
 }
+
+.quote-section {
+    text-align: center;
+    margin: 20px 0;
+    font-family: var(--font-primary);
+}
+
+.quote {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--foreground);
+    padding: 10px;
+}
+
+.author {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--foreground);
+}

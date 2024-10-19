@@ -13,6 +13,8 @@
   "darkMode": "מצב כהה",
   "lightMode": "מצב בהיר",
   "undoDeleteMessage": "למחוק את המשימה בוודאות?🤨",
-  "undoDeleteButton": "בטל מחיקה"
+  "undoDeleteButton": "בטל מחיקה",
+  "startTimer": "התחל טיימר",
+  "timeSpent": "זמן שחלף"
 
 }
