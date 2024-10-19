@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
 import React, { ReactNode } from 'react';
 
 interface TaskModalProps {
@@ -12,56 +14,86 @@ interface TaskModalProps {
 }
 
 const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onDelete, onToggleComplete, isCompleted, onSave, children, translations }) => {
-    if (!isOpen) return null;
+
+    // Disable body scrolling when the modal is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cleanup on modal close
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isOpen]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300">
-            <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg relative z-50 animate-modal-open">
-                <button
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors text-3xl"
+        <AnimatePresence>
+            {isOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     onClick={onClose}
+                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur grid place-items-center cursor-pointer"
                 >
-                    &times;
-                </button>
-
-                {children}
-
-                <div className="mt-4 flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
-                    {/* Bounce Animation */}
-                    <button
-                        className={`w-full sm:w-1/3 p-2 sm:p-3 rounded ${isCompleted ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} 
-                        text-white transition-all duration-200 transform active:scale-110 active:bg-opacity-80`}
-                        onClick={onToggleComplete}
+                    <motion.div
+                        initial={{ scale: 0, rotate: "12.5deg" }}
+                        animate={{ scale: 1, rotate: "0deg" }}
+                        exit={{ scale: 0, rotate: "0deg" }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="bg-white dark:bg-gray-700 w-full max-w-md p-6 rounded-lg shadow-lg relative z-50 transition-all overflow-hidden"
                     >
-                        {isCompleted ? translations.markIncomplete : translations.markComplete}
-                    </button>
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-400 transition-colors text-3xl"
+                            onClick={onClose}
+                        >
+                            &times;
+                        </button>
 
-                    {/* Separator line for larger screens */}
-                    <div className="hidden sm:block w-px h-full bg-gray-300 mx-3"></div>
+                        {children}
 
-                    {/* Rotate Animation */}
-                    <button
-                        className="w-full sm:w-1/3 bg-blue-500 text-white p-2 sm:p-3 rounded hover:bg-blue-600
-                        transition-all duration-200 transform active:rotate-12 active:bg-opacity-80"
-                        onClick={onSave}
-                    >
-                        {translations.saveChanges}
-                    </button>
+                        <div className="mt-4 flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                            {/* Bounce Animation */}
+                            <motion.button
+                                className={`w-full sm:w-1/3 p-2 sm:p-3 rounded ${isCompleted ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} 
+                                text-white transition-all transform active:scale-110 active:bg-opacity-80`}
+                                onClick={onToggleComplete}
+                                whileTap={{ scale: 0.9 }}
+                            >
+                                {isCompleted ? translations.markIncomplete : translations.markComplete}
+                            </motion.button>
 
-                    {/* Separator line for larger screens */}
-                    <div className="hidden sm:block w-px h-full bg-gray-300 mx-3"></div>
+                            <div className="hidden sm:block w-px h-full bg-gray-300 mx-3"></div>
 
-                    {/* Shake Animation */}
-                    <button
-                        className="w-full sm:w-1/3 bg-red-700 text-white p-2 sm:p-3 rounded hover:bg-red-800
-                        transition-all duration-200 transform active:translate-x-1 active:-translate-x-1 active:bg-opacity-80"
-                        onClick={onDelete}
-                    >
-                        {translations.deleteTask}
-                    </button>
-                </div>
-            </div>
-        </div>
+                            {/* Rotate Animation */}
+                            <motion.button
+                                className="w-full sm:w-1/3 bg-blue-500 text-white p-2 sm:p-3 rounded hover:bg-blue-600
+                                transition-all transform active:bg-opacity-80"
+                                onClick={onSave}
+                                whileTap={{ rotate: 10 }}
+                            >
+                                {translations.saveChanges}
+                            </motion.button>
+
+                            <div className="hidden sm:block w-px h-full bg-gray-300 mx-3"></div>
+
+                            {/* Shake Animation */}
+                            <motion.button
+                                className="w-full sm:w-1/3 bg-red-700 text-white p-2 sm:p-3 rounded hover:bg-red-800
+                                transition-all transform active:bg-opacity-80"
+                                onClick={onDelete}
+                                whileTap={{ x: [-5, 5, -5, 0] }}
+                            >
+                                {translations.deleteTask}
+                            </motion.button>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 };
 

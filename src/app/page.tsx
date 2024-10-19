@@ -92,7 +92,8 @@ export default function Home() {
 
             {/* TaskList Component - Core of the application */}
             <main
-                className="w-full max-w-2xl z-10 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg transition-transform transform hover:scale-105 dark:bg-gray-700 dark:bg-opacity-90">
+                className="w-full max-w-2xl z-10 bg-white bg-opacity-90 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 dark:bg-gray-700 dark:bg-opacity-90"
+            >
                 <TaskList tasks={tasks} translations={translations}/>
             </main>
 
