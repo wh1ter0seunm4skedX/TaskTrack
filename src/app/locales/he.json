@@ -1,6 +1,8 @@
 {
   "taskTrackTitle": "TaskTrack - ניהול המשימות שלך",
   "taskTrackSubtitle": "הוסף, ערוך וניהול משימות יומיומיות בקלות.",
+  "taskTitle": "כותרת המשימה",
+  "taskDescription": "תיאור המשימה",
   "addTask": "הוסף משימה",
   "editTask": "ערוך",
   "deleteTask": "מחק",

@@ -1,6 +1,8 @@
 {
   "taskTrackTitle": "TaskTrack - Manage Your Tasks",
   "taskTrackSubtitle": "Add, edit, and manage your daily tasks with style.",
+  "taskTitle": "Task Title",
+  "taskDescription": "Task Description",
   "addTask": "Add Task",
   "editTask": "Edit",
   "deleteTask": "Delete",
