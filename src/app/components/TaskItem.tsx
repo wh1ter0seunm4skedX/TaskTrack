@@ -6,7 +6,7 @@ const TaskItem = ({ task, onToggleComplete, onDelete, onEdit, isModalOpen, onOpe
     task: Task,
     onToggleComplete: (id: string) => void,
     onDelete: (id: string) => void,
-    onEdit: (id: string, title: string, description: string) => (id: string, title: string, description: string, completed: boolean) => Promise<void>,
+    onEdit: (id: string, title: string, description: string) => void,
     isModalOpen: boolean,
     onOpenModal: () => void,
     onCloseModal: () => void,
