@@ -4,6 +4,7 @@ import TaskItem from './TaskItem';
 import TaskModal from './TaskModal';
 import axios from 'axios';
 import { Task } from '../types';
+import ErrorModal from './ErrorModal';
 
 const TaskList = ({ translations }: { translations: any }) => {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -13,6 +14,8 @@ const TaskList = ({ translations }: { translations: any }) => {
     const [undoTimer, setUndoTimer] = useState<NodeJS.Timeout | null>(null);
     const [editedTitle, setEditedTitle] = useState('');
     const [editedDescription, setEditedDescription] = useState('');
+    const [error, setError] = useState<string | null>(null);  // Error state
+    const [retryAction, setRetryAction] = useState<() => void | null>(null);  // Store retry function
 
     // Fetch tasks from API on component mount
     useEffect(() => {
@@ -21,7 +24,8 @@ const TaskList = ({ translations }: { translations: any }) => {
                 const response = await axios.get('/api/tasks');
                 setTasks(response.data);
             } catch (error) {
-                console.error('Error fetching tasks:', error);
+                setError('Failed to fetch tasks. Do you want to try again?');
+                setRetryAction(() => fetchTasks);  // Set retry action for the modal
             }
         };
 
@@ -33,9 +37,9 @@ const TaskList = ({ translations }: { translations: any }) => {
         try {
             const response = await axios.post('/api/tasks', { title, description, completed: false });
             setTasks([...tasks, response.data]);
-            console.log('Task added:', response.data);
         } catch (error) {
-            console.error('Error adding task:', error);
+            setError('Failed to add task. Do you want to try again?');
+            setRetryAction(() => () => addTask(title, description));  // Set retry action for adding task
         }
     };
 
@@ -44,9 +48,9 @@ const TaskList = ({ translations }: { translations: any }) => {
         try {
             await axios.put('/api/tasks', { id, title, description, completed });
             setTasks(tasks.map(task => (task.id === id ? { ...task, title, description, completed } : task)));
-            console.log('Task updated:', id);
         } catch (error) {
-            console.error('Error updating task:', error);
+            setError('Failed to edit task. Do you want to try again?');
+            setRetryAction(() => () => editTask(id, title, description, completed));  // Set retry action for editing task
         }
     };
 
@@ -60,9 +64,9 @@ const TaskList = ({ translations }: { translations: any }) => {
 
         try {
             await axios.delete('/api/tasks', { data: { id } });
-            console.log('Task deleted:', id);
         } catch (error) {
-            console.error('Error deleting task:', error);
+            setError('Failed to delete task. Do you want to try again?');
+            setRetryAction(() => () => deleteTask(id));  // Set retry action for deleting task
         }
 
         setIsUndoVisible(true);
@@ -120,6 +124,13 @@ const TaskList = ({ translations }: { translations: any }) => {
 
     return (
         <div className="p-4">
+            {error && (
+                <ErrorModal
+                    errorMessage={error}
+                    onRetry={retryAction}
+                    onClose={() => setError(null)}
+                />
+            )}
             <TaskInput onAddTask={addTask} translations={translations} />
             <div className="mt-4">
                 {tasks.map(task => (
